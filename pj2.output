@@ -1,0 +1,4486 @@
+Terminals unused in grammar
+
+    IN
+    OUT
+    ASSIGNOP
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: PROGRAM IS body SEMICOLON
+
+    2 body: BEGIN_1 END
+    3     | BEGIN_1 statements END
+    4     | declarations BEGIN_1 END
+    5     | declarations BEGIN_1 statements END
+
+    6 declarations: declaration
+    7             | declarations declaration
+
+    8 declaration: VAR
+    9            | VAR var_decls
+   10            | TYPE
+   11            | TYPE type_decls
+   12            | PROCEDURE
+   13            | PROCEDURE procedure_decls
+
+   14 var_decls: var_decl
+   15          | var_decls var_decl
+
+   16 var_decl: ID ASSIGN expression SEMICOLON
+   17         | ID COLON type ASSIGN expression SEMICOLON
+   18         | ID comma_IDs ASSIGN expression SEMICOLON
+   19         | ID comma_IDs COLON type ASSIGN expression SEMICOLON
+
+   20 type_decls: type_decl
+   21           | type_decls type_decl
+
+   22 type_decl: ID IS type SEMICOLON
+
+   23 procedure_decls: procedure_decl
+   24                | procedure_decls procedure_decl
+
+   25 procedure_decl: ID formal_params IS body SEMICOLON
+   26               | ID formal_params COLON type IS body SEMICOLON
+
+   27 type: ID
+   28     | ARRAY OF type
+   29     | RECORD components END
+
+   30 components: component
+   31           | components component
+
+   32 component: ID COLON type SEMICOLON
+
+   33 formal_params: LB fp_section RB
+   34              | LB fp_section semi_fp_sections RB
+   35              | LB RB
+
+   36 semi_fp_sections: SEMICOLON fp_section
+   37                 | semi_fp_sections SEMICOLON fp_section
+
+   38 fp_section: ID COLON type
+   39           | ID comma_IDs COLON type
+
+   40 comma_IDs: COMMA ID
+   41          | comma_IDs COMMA ID
+
+   42 comma_l_values: COMMA l_value
+   43               | comma_l_values COMMA l_value
+
+   44 statement: l_value ASSIGN expression SEMICOLON
+   45          | ID actual_params SEMICOLON
+   46          | READ LB l_value RB SEMICOLON
+   47          | READ LB l_value comma_l_values RB SEMICOLON
+   48          | WRITE write_params SEMICOLON
+   49          | IF expression THEN END SEMICOLON
+   50          | IF expression THEN ELSE END SEMICOLON
+   51          | IF expression THEN ELSE statements END SEMICOLON
+   52          | IF expression THEN statements END SEMICOLON
+   53          | IF expression THEN statements ELSE END SEMICOLON
+   54          | IF expression THEN statements ELSE statements END SEMICOLON
+   55          | IF expression THEN ELSIF_expression_THEN_statements END SEMICOLON
+   56          | IF expression THEN ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   57          | IF expression THEN ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+   58          | IF expression THEN statements ELSIF_expression_THEN_statements END SEMICOLON
+   59          | IF expression THEN statements ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   60          | IF expression THEN statements ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+   61          | WHILE expression DO END SEMICOLON
+   62          | WHILE expression DO statements END SEMICOLON
+   63          | LOOP END SEMICOLON
+   64          | LOOP statements END SEMICOLON
+   65          | FOR ID ASSIGN expression TO expression DO END SEMICOLON
+   66          | FOR ID ASSIGN expression TO expression DO statements END SEMICOLON
+   67          | FOR ID ASSIGN expression TO expression BY expression DO END SEMICOLON
+   68          | FOR ID ASSIGN expression TO expression BY expression DO statements END SEMICOLON
+   69          | EXIT SEMICOLON
+   70          | RETURN expression SEMICOLON
+   71          | RETURN SEMICOLON
+
+   72 statements: statement
+   73           | statements statement
+
+   74 ELSIF_expression_THEN_statements: ELSIF_expression_THEN_statement
+   75                                 | ELSIF_expression_THEN_statements ELSIF_expression_THEN_statement
+
+   76 ELSIF_expression_THEN_statement: ELSIF expression THEN
+   77                                | ELSIF expression THEN statements
+
+   78 write_params: LB write_expr RB
+   79             | LB write_expr comma_write_exprs RB
+   80             | LB RB
+
+   81 comma_write_exprs: COMMA write_expr
+   82                  | comma_write_exprs COMMA write_expr
+
+   83 write_expr: STRING
+   84           | expression
+
+   85 expression: REAL
+   86           | INTEGER
+   87           | l_value
+   88           | LB expression RB
+   89           | expression ADD expression
+   90           | expression SUB expression
+   91           | expression MULT expression
+   92           | expression DIVD expression
+   93           | expression DIV expression
+   94           | expression MOD expression
+   95           | expression OR expression
+   96           | expression AND expression
+   97           | expression GT expression
+   98           | expression LT expression
+   99           | expression EQ expression
+  100           | expression GE expression
+  101           | expression LE expression
+  102           | expression NEQ expression
+  103           | NOT expression
+  104           | ADD expression
+  105           | SUB expression
+  106           | ID actual_params
+  107           | ID comp_values
+  108           | ID array_values
+
+  109 l_value: ID
+  110        | l_value LSB expression RSB
+  111        | l_value DOT ID
+
+  112 actual_params: LB expression RB
+  113              | LB expression comma_expressions RB
+  114              | LB RB
+
+  115 comma_expressions: COMMA expression
+  116                  | comma_expressions COMMA expression
+
+  117 comp_values: LCB ID ASSIGN expression RCB
+  118            | LCB ID ASSIGN expression semi_ID_assign_expressions RCB
+
+  119 semi_ID_assign_expressions: SEMICOLON ID ASSIGN expression
+  120                           | semi_ID_assign_expressions SEMICOLON ID ASSIGN expression
+
+  121 array_values: LAB array_value RAB
+  122             | LAB array_value comma_array_values RAB
+
+  123 comma_array_values: COMMA array_value
+  124                   | comma_array_values COMMA array_value
+
+  125 array_value: expression
+  126            | expression OF expression
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    AND (258) 96
+    ARRAY (259) 28
+    BEGIN_1 (260) 2 3 4 5
+    BY (261) 67 68
+    DIV (262) 93
+    DO (263) 61 62 65 66 67 68
+    ELSE (264) 50 51 53 54 56 57 59 60
+    ELSIF (265) 76 77
+    END (266) 2 3 4 5 29 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68
+    EXIT (267) 69
+    FOR (268) 65 66 67 68
+    IF (269) 49 50 51 52 53 54 55 56 57 58 59 60
+    IN (270)
+    IS (271) 1 22 25 26
+    LOOP (272) 63 64
+    MOD (273) 94
+    NOT (274) 103
+    OF (275) 28 126
+    OR (276) 95
+    OUT (277)
+    PROCEDURE (278) 12 13
+    PROGRAM (279) 1
+    READ (280) 46 47
+    RECORD (281) 29
+    RETURN (282) 70 71
+    THEN (283) 49 50 51 52 53 54 55 56 57 58 59 60 76 77
+    TO (284) 65 66 67 68
+    TYPE (285) 10 11
+    VAR (286) 8 9
+    WHILE (287) 61 62
+    WRITE (288) 48
+    ID (289) 16 17 18 19 22 25 26 27 32 38 39 40 41 45 65 66 67 68 106 107 108 109 111 117 118 119 120
+    REAL (290) 85
+    STRING (291) 83
+    INTEGER (292) 86
+    COLON (293) 17 19 26 32 38 39
+    SEMICOLON (294) 1 16 17 18 19 22 25 26 32 36 37 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 119 120
+    COMMA (295) 40 41 42 43 81 82 115 116 123 124
+    DOT (296) 111
+    LB (297) 33 34 35 46 47 78 79 80 88 112 113 114
+    RB (298) 33 34 35 46 47 78 79 80 88 112 113 114
+    LSB (299) 110
+    RSB (300) 110
+    LCB (301) 117 118
+    RCB (302) 117 118
+    LAB (303) 121 122
+    RAB (304) 121 122
+    ASSIGN (305) 16 17 18 19 44 65 66 67 68 117 118 119 120
+    ADD (306) 89 104
+    SUB (307) 90 105
+    MULT (308) 91
+    DIVD (309) 92
+    LT (310) 98
+    LE (311) 101
+    GT (312) 97
+    GE (313) 100
+    EQ (314) 99
+    NEQ (315) 102
+    ASSIGNOP (316)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (62)
+        on left: 0
+    program (63)
+        on left: 1
+        on right: 0
+    body (64)
+        on left: 2 3 4 5
+        on right: 1 25 26
+    declarations (65)
+        on left: 6 7
+        on right: 4 5 7
+    declaration (66)
+        on left: 8 9 10 11 12 13
+        on right: 6 7
+    var_decls (67)
+        on left: 14 15
+        on right: 9 15
+    var_decl (68)
+        on left: 16 17 18 19
+        on right: 14 15
+    type_decls (69)
+        on left: 20 21
+        on right: 11 21
+    type_decl (70)
+        on left: 22
+        on right: 20 21
+    procedure_decls (71)
+        on left: 23 24
+        on right: 13 24
+    procedure_decl (72)
+        on left: 25 26
+        on right: 23 24
+    type (73)
+        on left: 27 28 29
+        on right: 17 19 22 26 28 32 38 39
+    components (74)
+        on left: 30 31
+        on right: 29 31
+    component (75)
+        on left: 32
+        on right: 30 31
+    formal_params (76)
+        on left: 33 34 35
+        on right: 25 26
+    semi_fp_sections (77)
+        on left: 36 37
+        on right: 34 37
+    fp_section (78)
+        on left: 38 39
+        on right: 33 34 36 37
+    comma_IDs (79)
+        on left: 40 41
+        on right: 18 19 39 41
+    comma_l_values (80)
+        on left: 42 43
+        on right: 43 47
+    statement (81)
+        on left: 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+        on right: 72 73
+    statements (82)
+        on left: 72 73
+        on right: 3 5 51 52 53 54 57 58 59 60 62 64 66 68 73 77
+    ELSIF_expression_THEN_statements (83)
+        on left: 74 75
+        on right: 55 56 57 58 59 60 75
+    ELSIF_expression_THEN_statement (84)
+        on left: 76 77
+        on right: 74 75
+    write_params (85)
+        on left: 78 79 80
+        on right: 48
+    comma_write_exprs (86)
+        on left: 81 82
+        on right: 79 82
+    write_expr (87)
+        on left: 83 84
+        on right: 78 79 81 82
+    expression (88)
+        on left: 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108
+        on right: 16 17 18 19 44 49 50 51 52 53 54 55 56 57 58 59 60 61 62 65 66 67 68 70 76 77 84 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 110 112 113 115 116 117 118 119 120 125 126
+    l_value (89)
+        on left: 109 110 111
+        on right: 42 43 44 46 47 87 110 111
+    actual_params (90)
+        on left: 112 113 114
+        on right: 45 106
+    comma_expressions (91)
+        on left: 115 116
+        on right: 113 116
+    comp_values (92)
+        on left: 117 118
+        on right: 107
+    semi_ID_assign_expressions (93)
+        on left: 119 120
+        on right: 118 120
+    array_values (94)
+        on left: 121 122
+        on right: 108
+    comma_array_values (95)
+        on left: 123 124
+        on right: 122 124
+    array_value (96)
+        on left: 125 126
+        on right: 121 122 123 124
+
+
+State 0
+
+    0 $accept: . program $end
+
+    PROGRAM  shift, and go to state 1
+
+    program  go to state 2
+
+
+State 1
+
+    1 program: PROGRAM . IS body SEMICOLON
+
+    IS  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 program: PROGRAM IS . body SEMICOLON
+
+    BEGIN_1    shift, and go to state 5
+    PROCEDURE  shift, and go to state 6
+    TYPE       shift, and go to state 7
+    VAR        shift, and go to state 8
+
+    body          go to state 9
+    declarations  go to state 10
+    declaration   go to state 11
+
+
+State 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 5
+
+    2 body: BEGIN_1 . END
+    3     | BEGIN_1 . statements END
+
+    END     shift, and go to state 12
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 23
+    l_value     go to state 24
+
+
+State 6
+
+   12 declaration: PROCEDURE .
+   13            | PROCEDURE . procedure_decls
+
+    ID  shift, and go to state 25
+
+    $default  reduce using rule 12 (declaration)
+
+    procedure_decls  go to state 26
+    procedure_decl   go to state 27
+
+
+State 7
+
+   10 declaration: TYPE .
+   11            | TYPE . type_decls
+
+    ID  shift, and go to state 28
+
+    $default  reduce using rule 10 (declaration)
+
+    type_decls  go to state 29
+    type_decl   go to state 30
+
+
+State 8
+
+    8 declaration: VAR .
+    9            | VAR . var_decls
+
+    ID  shift, and go to state 31
+
+    $default  reduce using rule 8 (declaration)
+
+    var_decls  go to state 32
+    var_decl   go to state 33
+
+
+State 9
+
+    1 program: PROGRAM IS body . SEMICOLON
+
+    SEMICOLON  shift, and go to state 34
+
+
+State 10
+
+    4 body: declarations . BEGIN_1 END
+    5     | declarations . BEGIN_1 statements END
+    7 declarations: declarations . declaration
+
+    BEGIN_1    shift, and go to state 35
+    PROCEDURE  shift, and go to state 6
+    TYPE       shift, and go to state 7
+    VAR        shift, and go to state 8
+
+    declaration  go to state 36
+
+
+State 11
+
+    6 declarations: declaration .
+
+    $default  reduce using rule 6 (declarations)
+
+
+State 12
+
+    2 body: BEGIN_1 END .
+
+    $default  reduce using rule 2 (body)
+
+
+State 13
+
+   69 statement: EXIT . SEMICOLON
+
+    SEMICOLON  shift, and go to state 37
+
+
+State 14
+
+   65 statement: FOR . ID ASSIGN expression TO expression DO END SEMICOLON
+   66          | FOR . ID ASSIGN expression TO expression DO statements END SEMICOLON
+   67          | FOR . ID ASSIGN expression TO expression BY expression DO END SEMICOLON
+   68          | FOR . ID ASSIGN expression TO expression BY expression DO statements END SEMICOLON
+
+    ID  shift, and go to state 38
+
+
+State 15
+
+   49 statement: IF . expression THEN END SEMICOLON
+   50          | IF . expression THEN ELSE END SEMICOLON
+   51          | IF . expression THEN ELSE statements END SEMICOLON
+   52          | IF . expression THEN statements END SEMICOLON
+   53          | IF . expression THEN statements ELSE END SEMICOLON
+   54          | IF . expression THEN statements ELSE statements END SEMICOLON
+   55          | IF . expression THEN ELSIF_expression_THEN_statements END SEMICOLON
+   56          | IF . expression THEN ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   57          | IF . expression THEN ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+   58          | IF . expression THEN statements ELSIF_expression_THEN_statements END SEMICOLON
+   59          | IF . expression THEN statements ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   60          | IF . expression THEN statements ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 46
+    l_value     go to state 47
+
+
+State 16
+
+   63 statement: LOOP . END SEMICOLON
+   64          | LOOP . statements END SEMICOLON
+
+    END     shift, and go to state 48
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 49
+    l_value     go to state 24
+
+
+State 17
+
+   46 statement: READ . LB l_value RB SEMICOLON
+   47          | READ . LB l_value comma_l_values RB SEMICOLON
+
+    LB  shift, and go to state 50
+
+
+State 18
+
+   70 statement: RETURN . expression SEMICOLON
+   71          | RETURN . SEMICOLON
+
+    NOT        shift, and go to state 39
+    ID         shift, and go to state 40
+    REAL       shift, and go to state 41
+    INTEGER    shift, and go to state 42
+    SEMICOLON  shift, and go to state 51
+    LB         shift, and go to state 43
+    ADD        shift, and go to state 44
+    SUB        shift, and go to state 45
+
+    expression  go to state 52
+    l_value     go to state 47
+
+
+State 19
+
+   61 statement: WHILE . expression DO END SEMICOLON
+   62          | WHILE . expression DO statements END SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 53
+    l_value     go to state 47
+
+
+State 20
+
+   48 statement: WRITE . write_params SEMICOLON
+
+    LB  shift, and go to state 54
+
+    write_params  go to state 55
+
+
+State 21
+
+   45 statement: ID . actual_params SEMICOLON
+  109 l_value: ID .
+
+    LB  shift, and go to state 56
+
+    $default  reduce using rule 109 (l_value)
+
+    actual_params  go to state 57
+
+
+State 22
+
+   72 statements: statement .
+
+    $default  reduce using rule 72 (statements)
+
+
+State 23
+
+    3 body: BEGIN_1 statements . END
+   73 statements: statements . statement
+
+    END     shift, and go to state 58
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 24
+
+   44 statement: l_value . ASSIGN expression SEMICOLON
+  110 l_value: l_value . LSB expression RSB
+  111        | l_value . DOT ID
+
+    DOT     shift, and go to state 60
+    LSB     shift, and go to state 61
+    ASSIGN  shift, and go to state 62
+
+
+State 25
+
+   25 procedure_decl: ID . formal_params IS body SEMICOLON
+   26               | ID . formal_params COLON type IS body SEMICOLON
+
+    LB  shift, and go to state 63
+
+    formal_params  go to state 64
+
+
+State 26
+
+   13 declaration: PROCEDURE procedure_decls .
+   24 procedure_decls: procedure_decls . procedure_decl
+
+    ID  shift, and go to state 25
+
+    $default  reduce using rule 13 (declaration)
+
+    procedure_decl  go to state 65
+
+
+State 27
+
+   23 procedure_decls: procedure_decl .
+
+    $default  reduce using rule 23 (procedure_decls)
+
+
+State 28
+
+   22 type_decl: ID . IS type SEMICOLON
+
+    IS  shift, and go to state 66
+
+
+State 29
+
+   11 declaration: TYPE type_decls .
+   21 type_decls: type_decls . type_decl
+
+    ID  shift, and go to state 28
+
+    $default  reduce using rule 11 (declaration)
+
+    type_decl  go to state 67
+
+
+State 30
+
+   20 type_decls: type_decl .
+
+    $default  reduce using rule 20 (type_decls)
+
+
+State 31
+
+   16 var_decl: ID . ASSIGN expression SEMICOLON
+   17         | ID . COLON type ASSIGN expression SEMICOLON
+   18         | ID . comma_IDs ASSIGN expression SEMICOLON
+   19         | ID . comma_IDs COLON type ASSIGN expression SEMICOLON
+
+    COLON   shift, and go to state 68
+    COMMA   shift, and go to state 69
+    ASSIGN  shift, and go to state 70
+
+    comma_IDs  go to state 71
+
+
+State 32
+
+    9 declaration: VAR var_decls .
+   15 var_decls: var_decls . var_decl
+
+    ID  shift, and go to state 31
+
+    $default  reduce using rule 9 (declaration)
+
+    var_decl  go to state 72
+
+
+State 33
+
+   14 var_decls: var_decl .
+
+    $default  reduce using rule 14 (var_decls)
+
+
+State 34
+
+    1 program: PROGRAM IS body SEMICOLON .
+
+    $default  reduce using rule 1 (program)
+
+
+State 35
+
+    4 body: declarations BEGIN_1 . END
+    5     | declarations BEGIN_1 . statements END
+
+    END     shift, and go to state 73
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 74
+    l_value     go to state 24
+
+
+State 36
+
+    7 declarations: declarations declaration .
+
+    $default  reduce using rule 7 (declarations)
+
+
+State 37
+
+   69 statement: EXIT SEMICOLON .
+
+    $default  reduce using rule 69 (statement)
+
+
+State 38
+
+   65 statement: FOR ID . ASSIGN expression TO expression DO END SEMICOLON
+   66          | FOR ID . ASSIGN expression TO expression DO statements END SEMICOLON
+   67          | FOR ID . ASSIGN expression TO expression BY expression DO END SEMICOLON
+   68          | FOR ID . ASSIGN expression TO expression BY expression DO statements END SEMICOLON
+
+    ASSIGN  shift, and go to state 75
+
+
+State 39
+
+  103 expression: NOT . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 76
+    l_value     go to state 47
+
+
+State 40
+
+  106 expression: ID . actual_params
+  107           | ID . comp_values
+  108           | ID . array_values
+  109 l_value: ID .
+
+    LB   shift, and go to state 56
+    LCB  shift, and go to state 77
+    LAB  shift, and go to state 78
+
+    $default  reduce using rule 109 (l_value)
+
+    actual_params  go to state 79
+    comp_values    go to state 80
+    array_values   go to state 81
+
+
+State 41
+
+   85 expression: REAL .
+
+    $default  reduce using rule 85 (expression)
+
+
+State 42
+
+   86 expression: INTEGER .
+
+    $default  reduce using rule 86 (expression)
+
+
+State 43
+
+   88 expression: LB . expression RB
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 82
+    l_value     go to state 47
+
+
+State 44
+
+  104 expression: ADD . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 83
+    l_value     go to state 47
+
+
+State 45
+
+  105 expression: SUB . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 84
+    l_value     go to state 47
+
+
+State 46
+
+   49 statement: IF expression . THEN END SEMICOLON
+   50          | IF expression . THEN ELSE END SEMICOLON
+   51          | IF expression . THEN ELSE statements END SEMICOLON
+   52          | IF expression . THEN statements END SEMICOLON
+   53          | IF expression . THEN statements ELSE END SEMICOLON
+   54          | IF expression . THEN statements ELSE statements END SEMICOLON
+   55          | IF expression . THEN ELSIF_expression_THEN_statements END SEMICOLON
+   56          | IF expression . THEN ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   57          | IF expression . THEN ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+   58          | IF expression . THEN statements ELSIF_expression_THEN_statements END SEMICOLON
+   59          | IF expression . THEN statements ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   60          | IF expression . THEN statements ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    THEN  shift, and go to state 89
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+
+State 47
+
+   87 expression: l_value .
+  110 l_value: l_value . LSB expression RSB
+  111        | l_value . DOT ID
+
+    DOT  shift, and go to state 60
+    LSB  shift, and go to state 61
+
+    $default  reduce using rule 87 (expression)
+
+
+State 48
+
+   63 statement: LOOP END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 100
+
+
+State 49
+
+   64 statement: LOOP statements . END SEMICOLON
+   73 statements: statements . statement
+
+    END     shift, and go to state 101
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 50
+
+   46 statement: READ LB . l_value RB SEMICOLON
+   47          | READ LB . l_value comma_l_values RB SEMICOLON
+
+    ID  shift, and go to state 102
+
+    l_value  go to state 103
+
+
+State 51
+
+   71 statement: RETURN SEMICOLON .
+
+    $default  reduce using rule 71 (statement)
+
+
+State 52
+
+   70 statement: RETURN expression . SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND        shift, and go to state 85
+    DIV        shift, and go to state 86
+    MOD        shift, and go to state 87
+    OR         shift, and go to state 88
+    SEMICOLON  shift, and go to state 104
+    ADD        shift, and go to state 90
+    SUB        shift, and go to state 91
+    MULT       shift, and go to state 92
+    DIVD       shift, and go to state 93
+    LT         shift, and go to state 94
+    LE         shift, and go to state 95
+    GT         shift, and go to state 96
+    GE         shift, and go to state 97
+    EQ         shift, and go to state 98
+    NEQ        shift, and go to state 99
+
+
+State 53
+
+   61 statement: WHILE expression . DO END SEMICOLON
+   62          | WHILE expression . DO statements END SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    DO    shift, and go to state 105
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+
+State 54
+
+   78 write_params: LB . write_expr RB
+   79             | LB . write_expr comma_write_exprs RB
+   80             | LB . RB
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    STRING   shift, and go to state 106
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    RB       shift, and go to state 107
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    write_expr  go to state 108
+    expression  go to state 109
+    l_value     go to state 47
+
+
+State 55
+
+   48 statement: WRITE write_params . SEMICOLON
+
+    SEMICOLON  shift, and go to state 110
+
+
+State 56
+
+  112 actual_params: LB . expression RB
+  113              | LB . expression comma_expressions RB
+  114              | LB . RB
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    RB       shift, and go to state 111
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 112
+    l_value     go to state 47
+
+
+State 57
+
+   45 statement: ID actual_params . SEMICOLON
+
+    SEMICOLON  shift, and go to state 113
+
+
+State 58
+
+    3 body: BEGIN_1 statements END .
+
+    $default  reduce using rule 3 (body)
+
+
+State 59
+
+   73 statements: statements statement .
+
+    $default  reduce using rule 73 (statements)
+
+
+State 60
+
+  111 l_value: l_value DOT . ID
+
+    ID  shift, and go to state 114
+
+
+State 61
+
+  110 l_value: l_value LSB . expression RSB
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 115
+    l_value     go to state 47
+
+
+State 62
+
+   44 statement: l_value ASSIGN . expression SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 116
+    l_value     go to state 47
+
+
+State 63
+
+   33 formal_params: LB . fp_section RB
+   34              | LB . fp_section semi_fp_sections RB
+   35              | LB . RB
+
+    ID  shift, and go to state 117
+    RB  shift, and go to state 118
+
+    fp_section  go to state 119
+
+
+State 64
+
+   25 procedure_decl: ID formal_params . IS body SEMICOLON
+   26               | ID formal_params . COLON type IS body SEMICOLON
+
+    IS     shift, and go to state 120
+    COLON  shift, and go to state 121
+
+
+State 65
+
+   24 procedure_decls: procedure_decls procedure_decl .
+
+    $default  reduce using rule 24 (procedure_decls)
+
+
+State 66
+
+   22 type_decl: ID IS . type SEMICOLON
+
+    ARRAY   shift, and go to state 122
+    RECORD  shift, and go to state 123
+    ID      shift, and go to state 124
+
+    type  go to state 125
+
+
+State 67
+
+   21 type_decls: type_decls type_decl .
+
+    $default  reduce using rule 21 (type_decls)
+
+
+State 68
+
+   17 var_decl: ID COLON . type ASSIGN expression SEMICOLON
+
+    ARRAY   shift, and go to state 122
+    RECORD  shift, and go to state 123
+    ID      shift, and go to state 124
+
+    type  go to state 126
+
+
+State 69
+
+   40 comma_IDs: COMMA . ID
+
+    ID  shift, and go to state 127
+
+
+State 70
+
+   16 var_decl: ID ASSIGN . expression SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 128
+    l_value     go to state 47
+
+
+State 71
+
+   18 var_decl: ID comma_IDs . ASSIGN expression SEMICOLON
+   19         | ID comma_IDs . COLON type ASSIGN expression SEMICOLON
+   41 comma_IDs: comma_IDs . COMMA ID
+
+    COLON   shift, and go to state 129
+    COMMA   shift, and go to state 130
+    ASSIGN  shift, and go to state 131
+
+
+State 72
+
+   15 var_decls: var_decls var_decl .
+
+    $default  reduce using rule 15 (var_decls)
+
+
+State 73
+
+    4 body: declarations BEGIN_1 END .
+
+    $default  reduce using rule 4 (body)
+
+
+State 74
+
+    5 body: declarations BEGIN_1 statements . END
+   73 statements: statements . statement
+
+    END     shift, and go to state 132
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 75
+
+   65 statement: FOR ID ASSIGN . expression TO expression DO END SEMICOLON
+   66          | FOR ID ASSIGN . expression TO expression DO statements END SEMICOLON
+   67          | FOR ID ASSIGN . expression TO expression BY expression DO END SEMICOLON
+   68          | FOR ID ASSIGN . expression TO expression BY expression DO statements END SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 133
+    l_value     go to state 47
+
+
+State 76
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  103           | NOT expression .
+
+    $default  reduce using rule 103 (expression)
+
+
+State 77
+
+  117 comp_values: LCB . ID ASSIGN expression RCB
+  118            | LCB . ID ASSIGN expression semi_ID_assign_expressions RCB
+
+    ID  shift, and go to state 134
+
+
+State 78
+
+  121 array_values: LAB . array_value RAB
+  122             | LAB . array_value comma_array_values RAB
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression   go to state 135
+    l_value      go to state 47
+    array_value  go to state 136
+
+
+State 79
+
+  106 expression: ID actual_params .
+
+    $default  reduce using rule 106 (expression)
+
+
+State 80
+
+  107 expression: ID comp_values .
+
+    $default  reduce using rule 107 (expression)
+
+
+State 81
+
+  108 expression: ID array_values .
+
+    $default  reduce using rule 108 (expression)
+
+
+State 82
+
+   88 expression: LB expression . RB
+   89           | expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    RB    shift, and go to state 137
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+
+State 83
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  104           | ADD expression .
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 104 (expression)
+
+
+State 84
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  105           | SUB expression .
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 105 (expression)
+
+
+State 85
+
+   96 expression: expression AND . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 138
+    l_value     go to state 47
+
+
+State 86
+
+   93 expression: expression DIV . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 139
+    l_value     go to state 47
+
+
+State 87
+
+   94 expression: expression MOD . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 140
+    l_value     go to state 47
+
+
+State 88
+
+   95 expression: expression OR . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 141
+    l_value     go to state 47
+
+
+State 89
+
+   49 statement: IF expression THEN . END SEMICOLON
+   50          | IF expression THEN . ELSE END SEMICOLON
+   51          | IF expression THEN . ELSE statements END SEMICOLON
+   52          | IF expression THEN . statements END SEMICOLON
+   53          | IF expression THEN . statements ELSE END SEMICOLON
+   54          | IF expression THEN . statements ELSE statements END SEMICOLON
+   55          | IF expression THEN . ELSIF_expression_THEN_statements END SEMICOLON
+   56          | IF expression THEN . ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   57          | IF expression THEN . ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+   58          | IF expression THEN . statements ELSIF_expression_THEN_statements END SEMICOLON
+   59          | IF expression THEN . statements ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   60          | IF expression THEN . statements ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+
+    ELSE    shift, and go to state 142
+    ELSIF   shift, and go to state 143
+    END     shift, and go to state 144
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement                         go to state 22
+    statements                        go to state 145
+    ELSIF_expression_THEN_statements  go to state 146
+    ELSIF_expression_THEN_statement   go to state 147
+    l_value                           go to state 24
+
+
+State 90
+
+   89 expression: expression ADD . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 148
+    l_value     go to state 47
+
+
+State 91
+
+   90 expression: expression SUB . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 149
+    l_value     go to state 47
+
+
+State 92
+
+   91 expression: expression MULT . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 150
+    l_value     go to state 47
+
+
+State 93
+
+   92 expression: expression DIVD . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 151
+    l_value     go to state 47
+
+
+State 94
+
+   98 expression: expression LT . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 152
+    l_value     go to state 47
+
+
+State 95
+
+  101 expression: expression LE . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 153
+    l_value     go to state 47
+
+
+State 96
+
+   97 expression: expression GT . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 154
+    l_value     go to state 47
+
+
+State 97
+
+  100 expression: expression GE . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 155
+    l_value     go to state 47
+
+
+State 98
+
+   99 expression: expression EQ . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 156
+    l_value     go to state 47
+
+
+State 99
+
+  102 expression: expression NEQ . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 157
+    l_value     go to state 47
+
+
+State 100
+
+   63 statement: LOOP END SEMICOLON .
+
+    $default  reduce using rule 63 (statement)
+
+
+State 101
+
+   64 statement: LOOP statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 158
+
+
+State 102
+
+  109 l_value: ID .
+
+    $default  reduce using rule 109 (l_value)
+
+
+State 103
+
+   46 statement: READ LB l_value . RB SEMICOLON
+   47          | READ LB l_value . comma_l_values RB SEMICOLON
+  110 l_value: l_value . LSB expression RSB
+  111        | l_value . DOT ID
+
+    COMMA  shift, and go to state 159
+    DOT    shift, and go to state 60
+    RB     shift, and go to state 160
+    LSB    shift, and go to state 61
+
+    comma_l_values  go to state 161
+
+
+State 104
+
+   70 statement: RETURN expression SEMICOLON .
+
+    $default  reduce using rule 70 (statement)
+
+
+State 105
+
+   61 statement: WHILE expression DO . END SEMICOLON
+   62          | WHILE expression DO . statements END SEMICOLON
+
+    END     shift, and go to state 162
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 163
+    l_value     go to state 24
+
+
+State 106
+
+   83 write_expr: STRING .
+
+    $default  reduce using rule 83 (write_expr)
+
+
+State 107
+
+   80 write_params: LB RB .
+
+    $default  reduce using rule 80 (write_params)
+
+
+State 108
+
+   78 write_params: LB write_expr . RB
+   79             | LB write_expr . comma_write_exprs RB
+
+    COMMA  shift, and go to state 164
+    RB     shift, and go to state 165
+
+    comma_write_exprs  go to state 166
+
+
+State 109
+
+   84 write_expr: expression .
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 84 (write_expr)
+
+
+State 110
+
+   48 statement: WRITE write_params SEMICOLON .
+
+    $default  reduce using rule 48 (statement)
+
+
+State 111
+
+  114 actual_params: LB RB .
+
+    $default  reduce using rule 114 (actual_params)
+
+
+State 112
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  112 actual_params: LB expression . RB
+  113              | LB expression . comma_expressions RB
+
+    AND    shift, and go to state 85
+    DIV    shift, and go to state 86
+    MOD    shift, and go to state 87
+    OR     shift, and go to state 88
+    COMMA  shift, and go to state 167
+    RB     shift, and go to state 168
+    ADD    shift, and go to state 90
+    SUB    shift, and go to state 91
+    MULT   shift, and go to state 92
+    DIVD   shift, and go to state 93
+    LT     shift, and go to state 94
+    LE     shift, and go to state 95
+    GT     shift, and go to state 96
+    GE     shift, and go to state 97
+    EQ     shift, and go to state 98
+    NEQ    shift, and go to state 99
+
+    comma_expressions  go to state 169
+
+
+State 113
+
+   45 statement: ID actual_params SEMICOLON .
+
+    $default  reduce using rule 45 (statement)
+
+
+State 114
+
+  111 l_value: l_value DOT ID .
+
+    $default  reduce using rule 111 (l_value)
+
+
+State 115
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  110 l_value: l_value LSB expression . RSB
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    RSB   shift, and go to state 170
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+
+State 116
+
+   44 statement: l_value ASSIGN expression . SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND        shift, and go to state 85
+    DIV        shift, and go to state 86
+    MOD        shift, and go to state 87
+    OR         shift, and go to state 88
+    SEMICOLON  shift, and go to state 171
+    ADD        shift, and go to state 90
+    SUB        shift, and go to state 91
+    MULT       shift, and go to state 92
+    DIVD       shift, and go to state 93
+    LT         shift, and go to state 94
+    LE         shift, and go to state 95
+    GT         shift, and go to state 96
+    GE         shift, and go to state 97
+    EQ         shift, and go to state 98
+    NEQ        shift, and go to state 99
+
+
+State 117
+
+   38 fp_section: ID . COLON type
+   39           | ID . comma_IDs COLON type
+
+    COLON  shift, and go to state 172
+    COMMA  shift, and go to state 69
+
+    comma_IDs  go to state 173
+
+
+State 118
+
+   35 formal_params: LB RB .
+
+    $default  reduce using rule 35 (formal_params)
+
+
+State 119
+
+   33 formal_params: LB fp_section . RB
+   34              | LB fp_section . semi_fp_sections RB
+
+    SEMICOLON  shift, and go to state 174
+    RB         shift, and go to state 175
+
+    semi_fp_sections  go to state 176
+
+
+State 120
+
+   25 procedure_decl: ID formal_params IS . body SEMICOLON
+
+    BEGIN_1    shift, and go to state 5
+    PROCEDURE  shift, and go to state 6
+    TYPE       shift, and go to state 7
+    VAR        shift, and go to state 8
+
+    body          go to state 177
+    declarations  go to state 10
+    declaration   go to state 11
+
+
+State 121
+
+   26 procedure_decl: ID formal_params COLON . type IS body SEMICOLON
+
+    ARRAY   shift, and go to state 122
+    RECORD  shift, and go to state 123
+    ID      shift, and go to state 124
+
+    type  go to state 178
+
+
+State 122
+
+   28 type: ARRAY . OF type
+
+    OF  shift, and go to state 179
+
+
+State 123
+
+   29 type: RECORD . components END
+
+    ID  shift, and go to state 180
+
+    components  go to state 181
+    component   go to state 182
+
+
+State 124
+
+   27 type: ID .
+
+    $default  reduce using rule 27 (type)
+
+
+State 125
+
+   22 type_decl: ID IS type . SEMICOLON
+
+    SEMICOLON  shift, and go to state 183
+
+
+State 126
+
+   17 var_decl: ID COLON type . ASSIGN expression SEMICOLON
+
+    ASSIGN  shift, and go to state 184
+
+
+State 127
+
+   40 comma_IDs: COMMA ID .
+
+    $default  reduce using rule 40 (comma_IDs)
+
+
+State 128
+
+   16 var_decl: ID ASSIGN expression . SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND        shift, and go to state 85
+    DIV        shift, and go to state 86
+    MOD        shift, and go to state 87
+    OR         shift, and go to state 88
+    SEMICOLON  shift, and go to state 185
+    ADD        shift, and go to state 90
+    SUB        shift, and go to state 91
+    MULT       shift, and go to state 92
+    DIVD       shift, and go to state 93
+    LT         shift, and go to state 94
+    LE         shift, and go to state 95
+    GT         shift, and go to state 96
+    GE         shift, and go to state 97
+    EQ         shift, and go to state 98
+    NEQ        shift, and go to state 99
+
+
+State 129
+
+   19 var_decl: ID comma_IDs COLON . type ASSIGN expression SEMICOLON
+
+    ARRAY   shift, and go to state 122
+    RECORD  shift, and go to state 123
+    ID      shift, and go to state 124
+
+    type  go to state 186
+
+
+State 130
+
+   41 comma_IDs: comma_IDs COMMA . ID
+
+    ID  shift, and go to state 187
+
+
+State 131
+
+   18 var_decl: ID comma_IDs ASSIGN . expression SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 188
+    l_value     go to state 47
+
+
+State 132
+
+    5 body: declarations BEGIN_1 statements END .
+
+    $default  reduce using rule 5 (body)
+
+
+State 133
+
+   65 statement: FOR ID ASSIGN expression . TO expression DO END SEMICOLON
+   66          | FOR ID ASSIGN expression . TO expression DO statements END SEMICOLON
+   67          | FOR ID ASSIGN expression . TO expression BY expression DO END SEMICOLON
+   68          | FOR ID ASSIGN expression . TO expression BY expression DO statements END SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    TO    shift, and go to state 189
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+
+State 134
+
+  117 comp_values: LCB ID . ASSIGN expression RCB
+  118            | LCB ID . ASSIGN expression semi_ID_assign_expressions RCB
+
+    ASSIGN  shift, and go to state 190
+
+
+State 135
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  125 array_value: expression .
+  126            | expression . OF expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OF    shift, and go to state 191
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 125 (array_value)
+
+
+State 136
+
+  121 array_values: LAB array_value . RAB
+  122             | LAB array_value . comma_array_values RAB
+
+    COMMA  shift, and go to state 192
+    RAB    shift, and go to state 193
+
+    comma_array_values  go to state 194
+
+
+State 137
+
+   88 expression: LB expression RB .
+
+    $default  reduce using rule 88 (expression)
+
+
+State 138
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   96           | expression AND expression .
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 96 (expression)
+
+
+State 139
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   93           | expression DIV expression .
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    $default  reduce using rule 93 (expression)
+
+
+State 140
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   94           | expression MOD expression .
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 94 (expression)
+
+
+State 141
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   95           | expression OR expression .
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 95 (expression)
+
+
+State 142
+
+   50 statement: IF expression THEN ELSE . END SEMICOLON
+   51          | IF expression THEN ELSE . statements END SEMICOLON
+
+    END     shift, and go to state 195
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 196
+    l_value     go to state 24
+
+
+State 143
+
+   76 ELSIF_expression_THEN_statement: ELSIF . expression THEN
+   77                                | ELSIF . expression THEN statements
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 197
+    l_value     go to state 47
+
+
+State 144
+
+   49 statement: IF expression THEN END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 198
+
+
+State 145
+
+   52 statement: IF expression THEN statements . END SEMICOLON
+   53          | IF expression THEN statements . ELSE END SEMICOLON
+   54          | IF expression THEN statements . ELSE statements END SEMICOLON
+   58          | IF expression THEN statements . ELSIF_expression_THEN_statements END SEMICOLON
+   59          | IF expression THEN statements . ELSIF_expression_THEN_statements ELSE END SEMICOLON
+   60          | IF expression THEN statements . ELSIF_expression_THEN_statements ELSE statements END SEMICOLON
+   73 statements: statements . statement
+
+    ELSE    shift, and go to state 199
+    ELSIF   shift, and go to state 143
+    END     shift, and go to state 200
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement                         go to state 59
+    ELSIF_expression_THEN_statements  go to state 201
+    ELSIF_expression_THEN_statement   go to state 147
+    l_value                           go to state 24
+
+
+State 146
+
+   55 statement: IF expression THEN ELSIF_expression_THEN_statements . END SEMICOLON
+   56          | IF expression THEN ELSIF_expression_THEN_statements . ELSE END SEMICOLON
+   57          | IF expression THEN ELSIF_expression_THEN_statements . ELSE statements END SEMICOLON
+   75 ELSIF_expression_THEN_statements: ELSIF_expression_THEN_statements . ELSIF_expression_THEN_statement
+
+    ELSE   shift, and go to state 202
+    ELSIF  shift, and go to state 143
+    END    shift, and go to state 203
+
+    ELSIF_expression_THEN_statement  go to state 204
+
+
+State 147
+
+   74 ELSIF_expression_THEN_statements: ELSIF_expression_THEN_statement .
+
+    $default  reduce using rule 74 (ELSIF_expression_THEN_statements)
+
+
+State 148
+
+   89 expression: expression . ADD expression
+   89           | expression ADD expression .
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 89 (expression)
+
+
+State 149
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   90           | expression SUB expression .
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 90 (expression)
+
+
+State 150
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   91           | expression MULT expression .
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    $default  reduce using rule 91 (expression)
+
+
+State 151
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   92           | expression DIVD expression .
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    $default  reduce using rule 92 (expression)
+
+
+State 152
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   98           | expression LT expression .
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 98 (expression)
+
+
+State 153
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  101           | expression LE expression .
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 101 (expression)
+
+
+State 154
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   97           | expression GT expression .
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 97 (expression)
+
+
+State 155
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  100           | expression GE expression .
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 100 (expression)
+
+
+State 156
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+   99           | expression EQ expression .
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 99 (expression)
+
+
+State 157
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  102           | expression NEQ expression .
+
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+
+    $default  reduce using rule 102 (expression)
+
+
+State 158
+
+   64 statement: LOOP statements END SEMICOLON .
+
+    $default  reduce using rule 64 (statement)
+
+
+State 159
+
+   42 comma_l_values: COMMA . l_value
+
+    ID  shift, and go to state 102
+
+    l_value  go to state 205
+
+
+State 160
+
+   46 statement: READ LB l_value RB . SEMICOLON
+
+    SEMICOLON  shift, and go to state 206
+
+
+State 161
+
+   43 comma_l_values: comma_l_values . COMMA l_value
+   47 statement: READ LB l_value comma_l_values . RB SEMICOLON
+
+    COMMA  shift, and go to state 207
+    RB     shift, and go to state 208
+
+
+State 162
+
+   61 statement: WHILE expression DO END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 209
+
+
+State 163
+
+   62 statement: WHILE expression DO statements . END SEMICOLON
+   73 statements: statements . statement
+
+    END     shift, and go to state 210
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 164
+
+   81 comma_write_exprs: COMMA . write_expr
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    STRING   shift, and go to state 106
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    write_expr  go to state 211
+    expression  go to state 109
+    l_value     go to state 47
+
+
+State 165
+
+   78 write_params: LB write_expr RB .
+
+    $default  reduce using rule 78 (write_params)
+
+
+State 166
+
+   79 write_params: LB write_expr comma_write_exprs . RB
+   82 comma_write_exprs: comma_write_exprs . COMMA write_expr
+
+    COMMA  shift, and go to state 212
+    RB     shift, and go to state 213
+
+
+State 167
+
+  115 comma_expressions: COMMA . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 214
+    l_value     go to state 47
+
+
+State 168
+
+  112 actual_params: LB expression RB .
+
+    $default  reduce using rule 112 (actual_params)
+
+
+State 169
+
+  113 actual_params: LB expression comma_expressions . RB
+  116 comma_expressions: comma_expressions . COMMA expression
+
+    COMMA  shift, and go to state 215
+    RB     shift, and go to state 216
+
+
+State 170
+
+  110 l_value: l_value LSB expression RSB .
+
+    $default  reduce using rule 110 (l_value)
+
+
+State 171
+
+   44 statement: l_value ASSIGN expression SEMICOLON .
+
+    $default  reduce using rule 44 (statement)
+
+
+State 172
+
+   38 fp_section: ID COLON . type
+
+    ARRAY   shift, and go to state 122
+    RECORD  shift, and go to state 123
+    ID      shift, and go to state 124
+
+    type  go to state 217
+
+
+State 173
+
+   39 fp_section: ID comma_IDs . COLON type
+   41 comma_IDs: comma_IDs . COMMA ID
+
+    COLON  shift, and go to state 218
+    COMMA  shift, and go to state 130
+
+
+State 174
+
+   36 semi_fp_sections: SEMICOLON . fp_section
+
+    ID  shift, and go to state 117
+
+    fp_section  go to state 219
+
+
+State 175
+
+   33 formal_params: LB fp_section RB .
+
+    $default  reduce using rule 33 (formal_params)
+
+
+State 176
+
+   34 formal_params: LB fp_section semi_fp_sections . RB
+   37 semi_fp_sections: semi_fp_sections . SEMICOLON fp_section
+
+    SEMICOLON  shift, and go to state 220
+    RB         shift, and go to state 221
+
+
+State 177
+
+   25 procedure_decl: ID formal_params IS body . SEMICOLON
+
+    SEMICOLON  shift, and go to state 222
+
+
+State 178
+
+   26 procedure_decl: ID formal_params COLON type . IS body SEMICOLON
+
+    IS  shift, and go to state 223
+
+
+State 179
+
+   28 type: ARRAY OF . type
+
+    ARRAY   shift, and go to state 122
+    RECORD  shift, and go to state 123
+    ID      shift, and go to state 124
+
+    type  go to state 224
+
+
+State 180
+
+   32 component: ID . COLON type SEMICOLON
+
+    COLON  shift, and go to state 225
+
+
+State 181
+
+   29 type: RECORD components . END
+   31 components: components . component
+
+    END  shift, and go to state 226
+    ID   shift, and go to state 180
+
+    component  go to state 227
+
+
+State 182
+
+   30 components: component .
+
+    $default  reduce using rule 30 (components)
+
+
+State 183
+
+   22 type_decl: ID IS type SEMICOLON .
+
+    $default  reduce using rule 22 (type_decl)
+
+
+State 184
+
+   17 var_decl: ID COLON type ASSIGN . expression SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 228
+    l_value     go to state 47
+
+
+State 185
+
+   16 var_decl: ID ASSIGN expression SEMICOLON .
+
+    $default  reduce using rule 16 (var_decl)
+
+
+State 186
+
+   19 var_decl: ID comma_IDs COLON type . ASSIGN expression SEMICOLON
+
+    ASSIGN  shift, and go to state 229
+
+
+State 187
+
+   41 comma_IDs: comma_IDs COMMA ID .
+
+    $default  reduce using rule 41 (comma_IDs)
+
+
+State 188
+
+   18 var_decl: ID comma_IDs ASSIGN expression . SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND        shift, and go to state 85
+    DIV        shift, and go to state 86
+    MOD        shift, and go to state 87
+    OR         shift, and go to state 88
+    SEMICOLON  shift, and go to state 230
+    ADD        shift, and go to state 90
+    SUB        shift, and go to state 91
+    MULT       shift, and go to state 92
+    DIVD       shift, and go to state 93
+    LT         shift, and go to state 94
+    LE         shift, and go to state 95
+    GT         shift, and go to state 96
+    GE         shift, and go to state 97
+    EQ         shift, and go to state 98
+    NEQ        shift, and go to state 99
+
+
+State 189
+
+   65 statement: FOR ID ASSIGN expression TO . expression DO END SEMICOLON
+   66          | FOR ID ASSIGN expression TO . expression DO statements END SEMICOLON
+   67          | FOR ID ASSIGN expression TO . expression BY expression DO END SEMICOLON
+   68          | FOR ID ASSIGN expression TO . expression BY expression DO statements END SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 231
+    l_value     go to state 47
+
+
+State 190
+
+  117 comp_values: LCB ID ASSIGN . expression RCB
+  118            | LCB ID ASSIGN . expression semi_ID_assign_expressions RCB
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 232
+    l_value     go to state 47
+
+
+State 191
+
+  126 array_value: expression OF . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 233
+    l_value     go to state 47
+
+
+State 192
+
+  123 comma_array_values: COMMA . array_value
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression   go to state 135
+    l_value      go to state 47
+    array_value  go to state 234
+
+
+State 193
+
+  121 array_values: LAB array_value RAB .
+
+    $default  reduce using rule 121 (array_values)
+
+
+State 194
+
+  122 array_values: LAB array_value comma_array_values . RAB
+  124 comma_array_values: comma_array_values . COMMA array_value
+
+    COMMA  shift, and go to state 235
+    RAB    shift, and go to state 236
+
+
+State 195
+
+   50 statement: IF expression THEN ELSE END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 237
+
+
+State 196
+
+   51 statement: IF expression THEN ELSE statements . END SEMICOLON
+   73 statements: statements . statement
+
+    END     shift, and go to state 238
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 197
+
+   76 ELSIF_expression_THEN_statement: ELSIF expression . THEN
+   77                                | ELSIF expression . THEN statements
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    THEN  shift, and go to state 239
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+
+State 198
+
+   49 statement: IF expression THEN END SEMICOLON .
+
+    $default  reduce using rule 49 (statement)
+
+
+State 199
+
+   53 statement: IF expression THEN statements ELSE . END SEMICOLON
+   54          | IF expression THEN statements ELSE . statements END SEMICOLON
+
+    END     shift, and go to state 240
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 241
+    l_value     go to state 24
+
+
+State 200
+
+   52 statement: IF expression THEN statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 242
+
+
+State 201
+
+   58 statement: IF expression THEN statements ELSIF_expression_THEN_statements . END SEMICOLON
+   59          | IF expression THEN statements ELSIF_expression_THEN_statements . ELSE END SEMICOLON
+   60          | IF expression THEN statements ELSIF_expression_THEN_statements . ELSE statements END SEMICOLON
+   75 ELSIF_expression_THEN_statements: ELSIF_expression_THEN_statements . ELSIF_expression_THEN_statement
+
+    ELSE   shift, and go to state 243
+    ELSIF  shift, and go to state 143
+    END    shift, and go to state 244
+
+    ELSIF_expression_THEN_statement  go to state 204
+
+
+State 202
+
+   56 statement: IF expression THEN ELSIF_expression_THEN_statements ELSE . END SEMICOLON
+   57          | IF expression THEN ELSIF_expression_THEN_statements ELSE . statements END SEMICOLON
+
+    END     shift, and go to state 245
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 246
+    l_value     go to state 24
+
+
+State 203
+
+   55 statement: IF expression THEN ELSIF_expression_THEN_statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 247
+
+
+State 204
+
+   75 ELSIF_expression_THEN_statements: ELSIF_expression_THEN_statements ELSIF_expression_THEN_statement .
+
+    $default  reduce using rule 75 (ELSIF_expression_THEN_statements)
+
+
+State 205
+
+   42 comma_l_values: COMMA l_value .
+  110 l_value: l_value . LSB expression RSB
+  111        | l_value . DOT ID
+
+    DOT  shift, and go to state 60
+    LSB  shift, and go to state 61
+
+    $default  reduce using rule 42 (comma_l_values)
+
+
+State 206
+
+   46 statement: READ LB l_value RB SEMICOLON .
+
+    $default  reduce using rule 46 (statement)
+
+
+State 207
+
+   43 comma_l_values: comma_l_values COMMA . l_value
+
+    ID  shift, and go to state 102
+
+    l_value  go to state 248
+
+
+State 208
+
+   47 statement: READ LB l_value comma_l_values RB . SEMICOLON
+
+    SEMICOLON  shift, and go to state 249
+
+
+State 209
+
+   61 statement: WHILE expression DO END SEMICOLON .
+
+    $default  reduce using rule 61 (statement)
+
+
+State 210
+
+   62 statement: WHILE expression DO statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 250
+
+
+State 211
+
+   81 comma_write_exprs: COMMA write_expr .
+
+    $default  reduce using rule 81 (comma_write_exprs)
+
+
+State 212
+
+   82 comma_write_exprs: comma_write_exprs COMMA . write_expr
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    STRING   shift, and go to state 106
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    write_expr  go to state 251
+    expression  go to state 109
+    l_value     go to state 47
+
+
+State 213
+
+   79 write_params: LB write_expr comma_write_exprs RB .
+
+    $default  reduce using rule 79 (write_params)
+
+
+State 214
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  115 comma_expressions: COMMA expression .
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 115 (comma_expressions)
+
+
+State 215
+
+  116 comma_expressions: comma_expressions COMMA . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 252
+    l_value     go to state 47
+
+
+State 216
+
+  113 actual_params: LB expression comma_expressions RB .
+
+    $default  reduce using rule 113 (actual_params)
+
+
+State 217
+
+   38 fp_section: ID COLON type .
+
+    $default  reduce using rule 38 (fp_section)
+
+
+State 218
+
+   39 fp_section: ID comma_IDs COLON . type
+
+    ARRAY   shift, and go to state 122
+    RECORD  shift, and go to state 123
+    ID      shift, and go to state 124
+
+    type  go to state 253
+
+
+State 219
+
+   36 semi_fp_sections: SEMICOLON fp_section .
+
+    $default  reduce using rule 36 (semi_fp_sections)
+
+
+State 220
+
+   37 semi_fp_sections: semi_fp_sections SEMICOLON . fp_section
+
+    ID  shift, and go to state 117
+
+    fp_section  go to state 254
+
+
+State 221
+
+   34 formal_params: LB fp_section semi_fp_sections RB .
+
+    $default  reduce using rule 34 (formal_params)
+
+
+State 222
+
+   25 procedure_decl: ID formal_params IS body SEMICOLON .
+
+    $default  reduce using rule 25 (procedure_decl)
+
+
+State 223
+
+   26 procedure_decl: ID formal_params COLON type IS . body SEMICOLON
+
+    BEGIN_1    shift, and go to state 5
+    PROCEDURE  shift, and go to state 6
+    TYPE       shift, and go to state 7
+    VAR        shift, and go to state 8
+
+    body          go to state 255
+    declarations  go to state 10
+    declaration   go to state 11
+
+
+State 224
+
+   28 type: ARRAY OF type .
+
+    $default  reduce using rule 28 (type)
+
+
+State 225
+
+   32 component: ID COLON . type SEMICOLON
+
+    ARRAY   shift, and go to state 122
+    RECORD  shift, and go to state 123
+    ID      shift, and go to state 124
+
+    type  go to state 256
+
+
+State 226
+
+   29 type: RECORD components END .
+
+    $default  reduce using rule 29 (type)
+
+
+State 227
+
+   31 components: components component .
+
+    $default  reduce using rule 31 (components)
+
+
+State 228
+
+   17 var_decl: ID COLON type ASSIGN expression . SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND        shift, and go to state 85
+    DIV        shift, and go to state 86
+    MOD        shift, and go to state 87
+    OR         shift, and go to state 88
+    SEMICOLON  shift, and go to state 257
+    ADD        shift, and go to state 90
+    SUB        shift, and go to state 91
+    MULT       shift, and go to state 92
+    DIVD       shift, and go to state 93
+    LT         shift, and go to state 94
+    LE         shift, and go to state 95
+    GT         shift, and go to state 96
+    GE         shift, and go to state 97
+    EQ         shift, and go to state 98
+    NEQ        shift, and go to state 99
+
+
+State 229
+
+   19 var_decl: ID comma_IDs COLON type ASSIGN . expression SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 258
+    l_value     go to state 47
+
+
+State 230
+
+   18 var_decl: ID comma_IDs ASSIGN expression SEMICOLON .
+
+    $default  reduce using rule 18 (var_decl)
+
+
+State 231
+
+   65 statement: FOR ID ASSIGN expression TO expression . DO END SEMICOLON
+   66          | FOR ID ASSIGN expression TO expression . DO statements END SEMICOLON
+   67          | FOR ID ASSIGN expression TO expression . BY expression DO END SEMICOLON
+   68          | FOR ID ASSIGN expression TO expression . BY expression DO statements END SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    BY    shift, and go to state 259
+    DIV   shift, and go to state 86
+    DO    shift, and go to state 260
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+
+State 232
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  117 comp_values: LCB ID ASSIGN expression . RCB
+  118            | LCB ID ASSIGN expression . semi_ID_assign_expressions RCB
+
+    AND        shift, and go to state 85
+    DIV        shift, and go to state 86
+    MOD        shift, and go to state 87
+    OR         shift, and go to state 88
+    SEMICOLON  shift, and go to state 261
+    RCB        shift, and go to state 262
+    ADD        shift, and go to state 90
+    SUB        shift, and go to state 91
+    MULT       shift, and go to state 92
+    DIVD       shift, and go to state 93
+    LT         shift, and go to state 94
+    LE         shift, and go to state 95
+    GT         shift, and go to state 96
+    GE         shift, and go to state 97
+    EQ         shift, and go to state 98
+    NEQ        shift, and go to state 99
+
+    semi_ID_assign_expressions  go to state 263
+
+
+State 233
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  126 array_value: expression OF expression .
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 126 (array_value)
+
+
+State 234
+
+  123 comma_array_values: COMMA array_value .
+
+    $default  reduce using rule 123 (comma_array_values)
+
+
+State 235
+
+  124 comma_array_values: comma_array_values COMMA . array_value
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression   go to state 135
+    l_value      go to state 47
+    array_value  go to state 264
+
+
+State 236
+
+  122 array_values: LAB array_value comma_array_values RAB .
+
+    $default  reduce using rule 122 (array_values)
+
+
+State 237
+
+   50 statement: IF expression THEN ELSE END SEMICOLON .
+
+    $default  reduce using rule 50 (statement)
+
+
+State 238
+
+   51 statement: IF expression THEN ELSE statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 265
+
+
+State 239
+
+   76 ELSIF_expression_THEN_statement: ELSIF expression THEN .
+   77                                | ELSIF expression THEN . statements
+
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    $default  reduce using rule 76 (ELSIF_expression_THEN_statement)
+
+    statement   go to state 22
+    statements  go to state 266
+    l_value     go to state 24
+
+
+State 240
+
+   53 statement: IF expression THEN statements ELSE END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 267
+
+
+State 241
+
+   54 statement: IF expression THEN statements ELSE statements . END SEMICOLON
+   73 statements: statements . statement
+
+    END     shift, and go to state 268
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 242
+
+   52 statement: IF expression THEN statements END SEMICOLON .
+
+    $default  reduce using rule 52 (statement)
+
+
+State 243
+
+   59 statement: IF expression THEN statements ELSIF_expression_THEN_statements ELSE . END SEMICOLON
+   60          | IF expression THEN statements ELSIF_expression_THEN_statements ELSE . statements END SEMICOLON
+
+    END     shift, and go to state 269
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 270
+    l_value     go to state 24
+
+
+State 244
+
+   58 statement: IF expression THEN statements ELSIF_expression_THEN_statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 271
+
+
+State 245
+
+   56 statement: IF expression THEN ELSIF_expression_THEN_statements ELSE END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 272
+
+
+State 246
+
+   57 statement: IF expression THEN ELSIF_expression_THEN_statements ELSE statements . END SEMICOLON
+   73 statements: statements . statement
+
+    END     shift, and go to state 273
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 247
+
+   55 statement: IF expression THEN ELSIF_expression_THEN_statements END SEMICOLON .
+
+    $default  reduce using rule 55 (statement)
+
+
+State 248
+
+   43 comma_l_values: comma_l_values COMMA l_value .
+  110 l_value: l_value . LSB expression RSB
+  111        | l_value . DOT ID
+
+    DOT  shift, and go to state 60
+    LSB  shift, and go to state 61
+
+    $default  reduce using rule 43 (comma_l_values)
+
+
+State 249
+
+   47 statement: READ LB l_value comma_l_values RB SEMICOLON .
+
+    $default  reduce using rule 47 (statement)
+
+
+State 250
+
+   62 statement: WHILE expression DO statements END SEMICOLON .
+
+    $default  reduce using rule 62 (statement)
+
+
+State 251
+
+   82 comma_write_exprs: comma_write_exprs COMMA write_expr .
+
+    $default  reduce using rule 82 (comma_write_exprs)
+
+
+State 252
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  116 comma_expressions: comma_expressions COMMA expression .
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 116 (comma_expressions)
+
+
+State 253
+
+   39 fp_section: ID comma_IDs COLON type .
+
+    $default  reduce using rule 39 (fp_section)
+
+
+State 254
+
+   37 semi_fp_sections: semi_fp_sections SEMICOLON fp_section .
+
+    $default  reduce using rule 37 (semi_fp_sections)
+
+
+State 255
+
+   26 procedure_decl: ID formal_params COLON type IS body . SEMICOLON
+
+    SEMICOLON  shift, and go to state 274
+
+
+State 256
+
+   32 component: ID COLON type . SEMICOLON
+
+    SEMICOLON  shift, and go to state 275
+
+
+State 257
+
+   17 var_decl: ID COLON type ASSIGN expression SEMICOLON .
+
+    $default  reduce using rule 17 (var_decl)
+
+
+State 258
+
+   19 var_decl: ID comma_IDs COLON type ASSIGN expression . SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND        shift, and go to state 85
+    DIV        shift, and go to state 86
+    MOD        shift, and go to state 87
+    OR         shift, and go to state 88
+    SEMICOLON  shift, and go to state 276
+    ADD        shift, and go to state 90
+    SUB        shift, and go to state 91
+    MULT       shift, and go to state 92
+    DIVD       shift, and go to state 93
+    LT         shift, and go to state 94
+    LE         shift, and go to state 95
+    GT         shift, and go to state 96
+    GE         shift, and go to state 97
+    EQ         shift, and go to state 98
+    NEQ        shift, and go to state 99
+
+
+State 259
+
+   67 statement: FOR ID ASSIGN expression TO expression BY . expression DO END SEMICOLON
+   68          | FOR ID ASSIGN expression TO expression BY . expression DO statements END SEMICOLON
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 277
+    l_value     go to state 47
+
+
+State 260
+
+   65 statement: FOR ID ASSIGN expression TO expression DO . END SEMICOLON
+   66          | FOR ID ASSIGN expression TO expression DO . statements END SEMICOLON
+
+    END     shift, and go to state 278
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 279
+    l_value     go to state 24
+
+
+State 261
+
+  119 semi_ID_assign_expressions: SEMICOLON . ID ASSIGN expression
+
+    ID  shift, and go to state 280
+
+
+State 262
+
+  117 comp_values: LCB ID ASSIGN expression RCB .
+
+    $default  reduce using rule 117 (comp_values)
+
+
+State 263
+
+  118 comp_values: LCB ID ASSIGN expression semi_ID_assign_expressions . RCB
+  120 semi_ID_assign_expressions: semi_ID_assign_expressions . SEMICOLON ID ASSIGN expression
+
+    SEMICOLON  shift, and go to state 281
+    RCB        shift, and go to state 282
+
+
+State 264
+
+  124 comma_array_values: comma_array_values COMMA array_value .
+
+    $default  reduce using rule 124 (comma_array_values)
+
+
+State 265
+
+   51 statement: IF expression THEN ELSE statements END SEMICOLON .
+
+    $default  reduce using rule 51 (statement)
+
+
+State 266
+
+   73 statements: statements . statement
+   77 ELSIF_expression_THEN_statement: ELSIF expression THEN statements .
+
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    $default  reduce using rule 77 (ELSIF_expression_THEN_statement)
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 267
+
+   53 statement: IF expression THEN statements ELSE END SEMICOLON .
+
+    $default  reduce using rule 53 (statement)
+
+
+State 268
+
+   54 statement: IF expression THEN statements ELSE statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 283
+
+
+State 269
+
+   59 statement: IF expression THEN statements ELSIF_expression_THEN_statements ELSE END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 284
+
+
+State 270
+
+   60 statement: IF expression THEN statements ELSIF_expression_THEN_statements ELSE statements . END SEMICOLON
+   73 statements: statements . statement
+
+    END     shift, and go to state 285
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 271
+
+   58 statement: IF expression THEN statements ELSIF_expression_THEN_statements END SEMICOLON .
+
+    $default  reduce using rule 58 (statement)
+
+
+State 272
+
+   56 statement: IF expression THEN ELSIF_expression_THEN_statements ELSE END SEMICOLON .
+
+    $default  reduce using rule 56 (statement)
+
+
+State 273
+
+   57 statement: IF expression THEN ELSIF_expression_THEN_statements ELSE statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 286
+
+
+State 274
+
+   26 procedure_decl: ID formal_params COLON type IS body SEMICOLON .
+
+    $default  reduce using rule 26 (procedure_decl)
+
+
+State 275
+
+   32 component: ID COLON type SEMICOLON .
+
+    $default  reduce using rule 32 (component)
+
+
+State 276
+
+   19 var_decl: ID comma_IDs COLON type ASSIGN expression SEMICOLON .
+
+    $default  reduce using rule 19 (var_decl)
+
+
+State 277
+
+   67 statement: FOR ID ASSIGN expression TO expression BY expression . DO END SEMICOLON
+   68          | FOR ID ASSIGN expression TO expression BY expression . DO statements END SEMICOLON
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    DO    shift, and go to state 287
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+
+State 278
+
+   65 statement: FOR ID ASSIGN expression TO expression DO END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 288
+
+
+State 279
+
+   66 statement: FOR ID ASSIGN expression TO expression DO statements . END SEMICOLON
+   73 statements: statements . statement
+
+    END     shift, and go to state 289
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 280
+
+  119 semi_ID_assign_expressions: SEMICOLON ID . ASSIGN expression
+
+    ASSIGN  shift, and go to state 290
+
+
+State 281
+
+  120 semi_ID_assign_expressions: semi_ID_assign_expressions SEMICOLON . ID ASSIGN expression
+
+    ID  shift, and go to state 291
+
+
+State 282
+
+  118 comp_values: LCB ID ASSIGN expression semi_ID_assign_expressions RCB .
+
+    $default  reduce using rule 118 (comp_values)
+
+
+State 283
+
+   54 statement: IF expression THEN statements ELSE statements END SEMICOLON .
+
+    $default  reduce using rule 54 (statement)
+
+
+State 284
+
+   59 statement: IF expression THEN statements ELSIF_expression_THEN_statements ELSE END SEMICOLON .
+
+    $default  reduce using rule 59 (statement)
+
+
+State 285
+
+   60 statement: IF expression THEN statements ELSIF_expression_THEN_statements ELSE statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 292
+
+
+State 286
+
+   57 statement: IF expression THEN ELSIF_expression_THEN_statements ELSE statements END SEMICOLON .
+
+    $default  reduce using rule 57 (statement)
+
+
+State 287
+
+   67 statement: FOR ID ASSIGN expression TO expression BY expression DO . END SEMICOLON
+   68          | FOR ID ASSIGN expression TO expression BY expression DO . statements END SEMICOLON
+
+    END     shift, and go to state 293
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement   go to state 22
+    statements  go to state 294
+    l_value     go to state 24
+
+
+State 288
+
+   65 statement: FOR ID ASSIGN expression TO expression DO END SEMICOLON .
+
+    $default  reduce using rule 65 (statement)
+
+
+State 289
+
+   66 statement: FOR ID ASSIGN expression TO expression DO statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 295
+
+
+State 290
+
+  119 semi_ID_assign_expressions: SEMICOLON ID ASSIGN . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 296
+    l_value     go to state 47
+
+
+State 291
+
+  120 semi_ID_assign_expressions: semi_ID_assign_expressions SEMICOLON ID . ASSIGN expression
+
+    ASSIGN  shift, and go to state 297
+
+
+State 292
+
+   60 statement: IF expression THEN statements ELSIF_expression_THEN_statements ELSE statements END SEMICOLON .
+
+    $default  reduce using rule 60 (statement)
+
+
+State 293
+
+   67 statement: FOR ID ASSIGN expression TO expression BY expression DO END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 298
+
+
+State 294
+
+   68 statement: FOR ID ASSIGN expression TO expression BY expression DO statements . END SEMICOLON
+   73 statements: statements . statement
+
+    END     shift, and go to state 299
+    EXIT    shift, and go to state 13
+    FOR     shift, and go to state 14
+    IF      shift, and go to state 15
+    LOOP    shift, and go to state 16
+    READ    shift, and go to state 17
+    RETURN  shift, and go to state 18
+    WHILE   shift, and go to state 19
+    WRITE   shift, and go to state 20
+    ID      shift, and go to state 21
+
+    statement  go to state 59
+    l_value    go to state 24
+
+
+State 295
+
+   66 statement: FOR ID ASSIGN expression TO expression DO statements END SEMICOLON .
+
+    $default  reduce using rule 66 (statement)
+
+
+State 296
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  119 semi_ID_assign_expressions: SEMICOLON ID ASSIGN expression .
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 119 (semi_ID_assign_expressions)
+
+
+State 297
+
+  120 semi_ID_assign_expressions: semi_ID_assign_expressions SEMICOLON ID ASSIGN . expression
+
+    NOT      shift, and go to state 39
+    ID       shift, and go to state 40
+    REAL     shift, and go to state 41
+    INTEGER  shift, and go to state 42
+    LB       shift, and go to state 43
+    ADD      shift, and go to state 44
+    SUB      shift, and go to state 45
+
+    expression  go to state 300
+    l_value     go to state 47
+
+
+State 298
+
+   67 statement: FOR ID ASSIGN expression TO expression BY expression DO END SEMICOLON .
+
+    $default  reduce using rule 67 (statement)
+
+
+State 299
+
+   68 statement: FOR ID ASSIGN expression TO expression BY expression DO statements END . SEMICOLON
+
+    SEMICOLON  shift, and go to state 301
+
+
+State 300
+
+   89 expression: expression . ADD expression
+   90           | expression . SUB expression
+   91           | expression . MULT expression
+   92           | expression . DIVD expression
+   93           | expression . DIV expression
+   94           | expression . MOD expression
+   95           | expression . OR expression
+   96           | expression . AND expression
+   97           | expression . GT expression
+   98           | expression . LT expression
+   99           | expression . EQ expression
+  100           | expression . GE expression
+  101           | expression . LE expression
+  102           | expression . NEQ expression
+  120 semi_ID_assign_expressions: semi_ID_assign_expressions SEMICOLON ID ASSIGN expression .
+
+    AND   shift, and go to state 85
+    DIV   shift, and go to state 86
+    MOD   shift, and go to state 87
+    OR    shift, and go to state 88
+    ADD   shift, and go to state 90
+    SUB   shift, and go to state 91
+    MULT  shift, and go to state 92
+    DIVD  shift, and go to state 93
+    LT    shift, and go to state 94
+    LE    shift, and go to state 95
+    GT    shift, and go to state 96
+    GE    shift, and go to state 97
+    EQ    shift, and go to state 98
+    NEQ   shift, and go to state 99
+
+    $default  reduce using rule 120 (semi_ID_assign_expressions)
+
+
+State 301
+
+   68 statement: FOR ID ASSIGN expression TO expression BY expression DO statements END SEMICOLON .
+
+    $default  reduce using rule 68 (statement)
